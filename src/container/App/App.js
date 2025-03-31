@@ -1,10 +1,16 @@
 import './App.css';
 import logo from './img/logo.svg'
+import omelette from './img/spanish-omelette-with-potatoes.jpeg'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import './normalize.css'
 import styled from 'styled-components'
 import { useState } from 'react';
+import { Route, Link, Routes } from 'react-router-dom';
+import { About } from './About';
+import { Cooking } from './Cooking';
+import { DinnerTV } from './Dinner_TV';
+import { Recipe } from './Recipe';
 
 function SearchInput({ isSearch, searchValue, setSearchValue, onBlur }) {
   return isSearch ? (
@@ -16,8 +22,7 @@ function SearchInput({ isSearch, searchValue, setSearchValue, onBlur }) {
     />
   ) : null;
 }
-
-function App() {
+function Navbar() {
   const [isSearch, setIsSearch] = useState(false)
   const [searchValue, setSearchValue] = useState("");
 
@@ -34,40 +39,77 @@ function App() {
   };
 
   return (
+    <StyledNav>
+      <Link to='/'>
+        <StyledLogo src={logo}>
+        </StyledLogo>
+      </Link>
+      <StyledUl>
+        <StyledLi>
+          <SearchInput
+            isSearch={isSearch}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            onBlur={handleBlur}
+          />
+          <FontAwesomeIcon onClick={handleSearchClick} icon={faMagnifyingGlass} />
+        </StyledLi>
+        <StyledLi>
+          <Link to='/Recipe'>
+            Recipe
+          </Link>
+        </StyledLi>
+        <StyledLi>
+          <Link to='/DinnerTV'>
+            Dinner TV
+          </Link>
+        </StyledLi>
+        <StyledLi>
+          <Link to='/Cooking'>
+            Cooking School
+          </Link>
+        </StyledLi>
+        <StyledLi>
+          <Link to='/About'>
+            About
+          </Link>
+        </StyledLi>
+        <StyledButton>Sign In</StyledButton>
+      </StyledUl>
+    </StyledNav>
+  );
+}
+function HomePg() {
+  return (
+    <>
+      <StyledContentTitle>
+        Let's Get Cooking
+      </StyledContentTitle>
+      <StyledContentDescription>
+        Explore the best recipes from around the world. <br />Make cooking enjoyable again.
+      </StyledContentDescription>
+      <StyledContentBtn>
+        Explore Recipes
+      </StyledContentBtn>
+    </>
+  );
+}
+function App() {
+  return (
     <StyledBody>
       <StyledContainer>
-        <StyledNav>
-          <StyledLogo logo={logo}></StyledLogo>
-          <StyledUl>
-            <StyledLi>
-              <SearchInput
-                isSearch={isSearch}
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-                onBlur={handleBlur}
-              />
-              <FontAwesomeIcon onClick={handleSearchClick} icon={faMagnifyingGlass} />
-            </StyledLi>
-            <StyledLi>Reciep</StyledLi>
-            <StyledLi>Dinner TV</StyledLi>
-            <StyledLi>Cooking School</StyledLi>
-            <StyledLi>About</StyledLi>
-            <StyledButton>Sign In</StyledButton>
-          </StyledUl>
-        </StyledNav>
+        <Navbar />
         <StyledMain>
           <StyledMainL>
-            <StyledContentTitle>
-              Let's Get Cooking
-            </StyledContentTitle>
-            <StyledContentDescription>
-              Explore the best recipes from around the world. <br />Make cooking enjoyable again.
-            </StyledContentDescription>
-            <StyledContentBtn>
-              Explore Recipes
-            </StyledContentBtn>
+            <Routes>
+              <Route path='/' element={<HomePg />} />
+              <Route path='/Recipe' element={<Recipe />} />
+              <Route path='/Cooking' element={<Cooking />} />
+              <Route path='/About' element={<About />} />
+              <Route path='/DinnerTV' element={<DinnerTV />} />
+            </Routes>
           </StyledMainL>
-          <StyledMainR>
+          <StyledMainR backgroundImg={omelette}>
 
           </StyledMainR>
         </StyledMain>
@@ -98,8 +140,7 @@ const StyledContainer = styled.div`
   background-color: #f1ffcc;
 `
 
-const StyledLogo = styled.div`
-  background-image: url(${(props) => props.logo});
+const StyledLogo = styled.img`
   height: 80%;
   width: 80px;
   background-size: contain;
@@ -200,5 +241,8 @@ const StyledMainR = styled.div`
   height: 100%;
   width: 40%;
   align-self: space-around;
-  background-color: #fff;
+  background-image: url(${(props) => props.backgroundImg});
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
 `
